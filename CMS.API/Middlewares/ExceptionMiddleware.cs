@@ -46,8 +46,6 @@ namespace CMS.API.Middlewares
 
                 if (env.IsDevelopment())
                 {
-                    app.UseSwagger();
-                    app.UseSwaggerUI();
                     response = new ApiError((int)statusCode, ex.Message, ex.StackTrace.ToString());
                 }
                 else

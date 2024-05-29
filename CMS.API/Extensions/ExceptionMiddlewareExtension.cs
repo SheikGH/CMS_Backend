@@ -8,6 +8,11 @@ namespace CMS.API.Extensions
     {
         public static void ConfigureExceptionHandler(this WebApplication app)
         {
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
             app.UseMiddleware<ExceptionMiddleware>();
         }
         public static void ConfigureBuiltinExceptionHandler(this WebApplication app)
