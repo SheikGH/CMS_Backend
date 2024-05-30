@@ -118,10 +118,10 @@ var app = builder.Build();
 //    );
 //}
 
-//app.ConfigureExceptionHandler();
-app.ConfigureBuiltinExceptionHandler();
+app.ConfigureExceptionHandler();
+//app.ConfigureBuiltinExceptionHandler();
 //MiddleWare to handle exception - custom exception handling
-//app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseHsts();
 app.UseHttpsRedirection();
 app.UseRouting();
