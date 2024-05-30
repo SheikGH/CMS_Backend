@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.API.Controllers
 {
-    //[Authorize]
+   
     public class CustomersController : BaseController
     {
         private readonly IMediator _mediator;

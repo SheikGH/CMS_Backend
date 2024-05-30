@@ -34,7 +34,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //options.UseSqlServer(connString));
 options.UseSqlServer(builder.Configuration.GetConnectionString("dbCMS")));
 
+builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddCors();
+
+// Auto Mapper Configurations
+builder.Services.AddAutoMapper(typeof(CustomerProfile));
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
@@ -46,23 +51,23 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 //builder.Services.AddInfrastructure(builder.Configuration);
 //builder.Services.AddScoped<JwtService>();
 
-// Auto Mapper Configurations
-builder.Services.AddAutoMapper(typeof(CustomerProfile));
-
 //Implement CQRS by using MediatR 
 //builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 //builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 
 
-var secretKey = builder.Configuration.GetSection("AppSettings:Key").Value;
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+var secretKey = builder.Configuration.GetSection("Jwt:Key").Value;
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = false,
             ValidateIssuerSigningKey = true,
             //ValidIssuer = builder.Configuration["Jwt:Issuer"],
             //ValidAudience = builder.Configuration["Jwt:Audience"],
@@ -70,6 +75,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+builder.Services.AddAuthorization();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -117,12 +124,15 @@ app.ConfigureBuiltinExceptionHandler();
 //app.UseMiddleware<ExceptionMiddleware>();
 app.UseHsts();
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 //Implement Cache to Improve Performance
 //app.UseOutputCache();

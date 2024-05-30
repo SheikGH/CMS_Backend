@@ -23,6 +23,7 @@ namespace CMS.API.Controllers
             _authService = customerService;
             this.configuration = configuration;
         }
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginReqDto loginReq)
         {
@@ -51,7 +52,7 @@ namespace CMS.API.Controllers
         }
         private string CreateJWT(Customer custDto)
         {
-            var secretKey = configuration.GetSection("AppSettings:Key").Value;
+            var secretKey = configuration.GetSection("Jwt:Key").Value;
             var key = new SymmetricSecurityKey(Encoding.UTF8
                 //.GetBytes("shhh.. this is my top secret"));
                 .GetBytes(secretKey));
@@ -67,7 +68,7 @@ namespace CMS.API.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = signingCredentials
             };
 
