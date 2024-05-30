@@ -14,7 +14,7 @@ namespace CMS.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ICustomerService _customerService;
-        
+
         //public CustomersController(IMediator mediator, ICustomerService customerService)
         //{
         //    _mediator = mediator;
@@ -29,7 +29,7 @@ namespace CMS.API.Controllers
         public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
         {
             //var customer = await _mediator.Send(new GetCustomerByIdQuery(id));
-            var customer = await _customerService.GetCustomerById(id);
+            var customer = await _customerService.GetCustomerByIdAsync(id);
             if (customer == null)
             {
                 return NotFound();
@@ -50,7 +50,7 @@ namespace CMS.API.Controllers
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllCustomers()
         {
             //var customers = await _mediator.Send(new GetAllCustomersQuery());
-            var customers = await  _customerService.GetAllCustomers();
+            var customers = await _customerService.GetCustomersAsync();
             var customersResDto = customers.Select(s => new CustomerResDto
             {
                 CustomerId = s.CustomerId,
@@ -67,8 +67,8 @@ namespace CMS.API.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> CreateCustomer(CustomerDto customer)
         {
-            _customerService.AddCustomer(customer);
-            return CreatedAtAction("GetCustomerById", new { id = customer.CustomerId }, customer);
+            var newCustomer = await _customerService.AddCustomerAsync(customer);
+            return CreatedAtAction(nameof(GetCustomerById), new { id = newCustomer.CustomerId }, newCustomer);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCustomer(int id, CustomerDto customer)
@@ -77,40 +77,25 @@ namespace CMS.API.Controllers
             {
                 return BadRequest();
             }
-            _customerService.UpdateCustomer(customer);
+            var updatedCustomer = await _customerService.UpdateCustomerAsync(customer);
+            if (updatedCustomer == null)
+            {
+                return NotFound();
+            }
+
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
-            _customerService.DeleteCustomer(id);
+            var deletedCustomer = await _customerService.DeleteCustomerAsync(id);
+            if (deletedCustomer == null)
+            {
+                return NotFound();
+            }
+
             return NoContent();
         }
-        //[HttpPost]
-        //public async Task<ActionResult<int>> CreateCustomer(CreateCustomerCommand command)
-        //{
-        //    var customerId = await _mediator.Send(command);
-        //    return CreatedAtAction(nameof(GetCustomerById), new { id = customerId }, customerId);
-        //}
-
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateCustomer(int id, UpdateCustomerCommand command)
-        //{
-        //    if (id != command.CustomerId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    await _mediator.Send(command);
-        //    return NoContent();
-        //}
-
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteCustomer(int id)
-        //{
-        //    await _mediator.Send(new DeleteCustomerCommand { Id = id });
-        //    return NoContent();
-        //}
     }
 }

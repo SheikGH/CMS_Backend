@@ -10,7 +10,7 @@ namespace CMS.Core.Interfaces
     public interface IAuthRepository
     {
         Task<Customer> Authenticate(string userName, string password);
-        void Register(Customer cust);
+        Task<Customer> Register(Customer cust);
         Task<bool> CustAlreadyExists(string userName);
     }
 }

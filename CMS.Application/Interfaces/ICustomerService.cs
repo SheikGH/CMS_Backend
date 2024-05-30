@@ -10,10 +10,10 @@ namespace CMS.Application.Interfaces
 {
     public interface ICustomerService
     {
-        Task<IEnumerable<CustomerDto>> GetAllCustomers();
-        Task<CustomerDto> GetCustomerById(int id);
-        void AddCustomer(CustomerDto customer);
-        void UpdateCustomer(CustomerDto customer);
-        void DeleteCustomer(int id);
+        Task<IEnumerable<CustomerDto>> GetCustomersAsync();
+        Task<CustomerDto> GetCustomerByIdAsync(int id);
+        Task<CustomerDto> AddCustomerAsync(CustomerDto customer);
+        Task<CustomerDto> UpdateCustomerAsync(CustomerDto customer);
+        Task<CustomerDto> DeleteCustomerAsync(int id);
     }
 }

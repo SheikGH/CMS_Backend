@@ -13,18 +13,12 @@ namespace CMS.Core.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CustomerId { get; set; }
-
-        [Required]
         public string FirstName { get; set; }
 
-        [Required]
         public string LastName { get; set; }
 
-        [Required]
-        [EmailAddress]
         public string Email { get; set; }
 
-        [Required]
         public string Phone { get; set; }
 
         public string Address { get; set; }
@@ -32,7 +26,5 @@ namespace CMS.Core.Entities
         public string? PasswordKey { get; set; }
         //public byte[]? Password { get; set; }
         //public byte[]? PasswordKey { get; set; }
-
-
     }
 }

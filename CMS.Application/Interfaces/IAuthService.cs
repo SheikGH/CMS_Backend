@@ -1,4 +1,5 @@
-﻿using CMS.Core.Entities;
+﻿using CMS.Application.DTOs;
+using CMS.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace CMS.Application.Interfaces
     public interface IAuthService
     {
         Task<Customer> Authenticate(string userName, string password);
-        void Register(string userName, string password);
+        Task<RegisterResDto> Register(RegisterReqDto registerReqDto);
         Task<bool> CustAlreadyExists(string userName);
     }
 }

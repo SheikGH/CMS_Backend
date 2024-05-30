@@ -20,8 +20,7 @@ namespace CMS.Infrastructure.Repositories
         {
             _context = context;
         }
-
-        public async Task<IEnumerable<Customer>> GetAllCustomersAsync()
+        public async Task<IEnumerable<Customer>> GetCustomersAsync()
         {
             return await _context.Customers.ToListAsync();
         }
@@ -30,47 +29,29 @@ namespace CMS.Infrastructure.Repositories
         {
             return await _context.Customers.FindAsync(id);
         }
-        public async Task AddCustomerAsync(Customer customer)
+
+        public async Task<Customer> AddCustomerAsync(Customer customer)
         {
-            await _context.Customers.AddAsync(customer);
+            _context.Customers.Add(customer);
+            return customer;
         }
 
-        public async void UpdateCustomerAsync(Customer customer)
+        public async Task<Customer> UpdateCustomerAsync(Customer customer)
         {
             _context.Entry(customer).State = EntityState.Modified;
-
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!CustomerExists(id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-            //var customerToUpdate = _context.Customers.FirstOrDefault(x => x.CustomerId == customer.CustomerId);
-            //customerToUpdate.FirstName = customer.FirstName;
-            //customerToUpdate.LastName = customer.LastName;
-            //customerToUpdate.Email = customer.Email;
-            //customerToUpdate.Phone = customer.Phone;
-            //customerToUpdate.Address = customer.Address;
-            //_context.Customers.Update(customerToUpdate);
+            return customer;
         }
 
-        public async Task DeleteCustomerAsync(int id)
+        public async Task<Customer> DeleteCustomerAsync(int id)
         {
             var customer = await _context.Customers.FindAsync(id);
-            if (customer != null)
+            if (customer == null)
             {
-                _context.Customers.Remove(customer);
+                return null;
             }
+
+            _context.Customers.Remove(customer);
+            return customer;
         }
-        
     }
 }

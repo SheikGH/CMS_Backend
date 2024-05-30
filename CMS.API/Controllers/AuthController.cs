@@ -38,21 +38,15 @@ namespace CMS.API.Controllers
             return Ok(loginRes);
         }
         [HttpPost("register")]
-        public async Task<IActionResult> Register(LoginReqDto loginReq)
+        public async Task<IActionResult> Register(RegisterReqDto registerReqDto)
         {
-            if (await _authService.CustAlreadyExists(loginReq.Username))
-                return BadRequest("User already exists, please try something else");
+            if (await _authService.CustAlreadyExists(registerReqDto.Email))
+                return StatusCode(409); //BadRequest("Email already exists, please try something else");
 
-            _authService.Register(loginReq.Username, loginReq.Password);
-            return StatusCode(201);
-        }
-        [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate(LoginReqDto loginReq)
-        {
-            if (await _authService.CustAlreadyExists(loginReq.Username))
-                return BadRequest("User already exists, please try something else");
+            var registerResDto = await _authService.Register(registerReqDto);
+            if(registerResDto == null) 
+                BadRequest("Email already exists, please try something else");
 
-            _authService.Register(loginReq.Username, loginReq.Password);
             return StatusCode(201);
         }
         private string CreateJWT(Customer custDto)

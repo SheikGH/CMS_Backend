@@ -18,6 +18,8 @@ namespace CMS.Application.Mappings
         public CustomerProfile()
         {
             CreateMap<Customer, CustomerDto>().ReverseMap();
+            CreateMap<RegisterReqDto, RegisterResDto>().ReverseMap();
+            CreateMap<RegisterReqDto, Customer>().ReverseMap();
             //CreateMap<Customer, CustomerDto>();
             //CreateMap<CustomerDto, Customer>();
             //CreateMap<Customer, CustomerDto>()
@@ -27,7 +29,7 @@ namespace CMS.Application.Mappings
             //.ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
             //.ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
             //.ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address)).ReverseMap();
-           
+
         }
     }
 }

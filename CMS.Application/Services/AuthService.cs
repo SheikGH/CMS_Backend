@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CMS.Application.DTOs;
 using CMS.Application.Interfaces;
 using CMS.Core.Entities;
 using CMS.Core.Interfaces;
@@ -30,6 +31,28 @@ namespace CMS.Application.Services
             return customer;
         }
 
+        public async Task<RegisterResDto> Register(RegisterReqDto registerReqDto)
+        {
+            byte[] passwordHash, passwordKey;
+            if (!string.IsNullOrWhiteSpace(registerReqDto.Password))
+            {
+                using (var hmac = new HMACSHA512())
+                {
+                    passwordKey = hmac.Key;
+                    passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerReqDto.Password));
+                }
+            }
+            var customer = _mapper.Map<Customer>(registerReqDto);
+            customer.PasswordKey = registerReqDto.Password;
+            await _unitOfWork.Auth.Register(customer);
+            await _unitOfWork.CompleteAsync();
+            return _mapper.Map<RegisterResDto>(registerReqDto);
+        }
+
+        public async Task<bool> CustAlreadyExists(string userName)
+        {
+            return await _unitOfWork.Auth.CustAlreadyExists(userName);
+        }
         private bool MathPasswordHash(string passwordText, byte[] password, byte[] passwordKey)
         {
             using (var hmac = new HMACSHA512(passwordKey))
@@ -42,31 +65,6 @@ namespace CMS.Application.Services
                 }
                 return true;
             }
-        }
-
-        public void Register(string userName, string password)
-        {
-            byte[] passwordHash, passwordKey;
-            using (var hmac = new HMACSHA512())
-            {
-                passwordKey = hmac.Key;
-                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-            }
-           
-            Customer user = new Customer();
-            user.Email = userName;
-            //user.Password = passwordHash;
-            //user.PasswordKey = passwordKey;
-            user.Password = password;
-            user.PasswordKey = password;
-
-            _unitOfWork.Auth.Register(user);
-            _unitOfWork.CompleteAsync();
-        }
-
-        public async Task<bool> CustAlreadyExists(string userName)
-        {
-            return await _unitOfWork.Auth.CustAlreadyExists(userName);
         }
     }
 }

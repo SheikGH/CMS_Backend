@@ -15,9 +15,11 @@ namespace CMS.Application.DTOs
         public int CustomerId { get; set; }
 
         [Required]
+        [StringLength(50)]
         public string FirstName { get; set; }
 
         [Required]
+        [StringLength(50)]
         public string LastName { get; set; }
 
         [Required]
@@ -25,8 +27,9 @@ namespace CMS.Application.DTOs
         public string Email { get; set; }
 
         [Required]
+        [Phone]
         public string Phone { get; set; }
-
+        [Required]
         public string Address { get; set; }
     }
 }

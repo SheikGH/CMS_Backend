@@ -26,9 +26,10 @@ namespace CMS.Infrastructure.Repositories
             return cust;
         }
 
-        public void Register(Customer user)
+        public async Task<Customer> Register(Customer customer)
         {
-            dc.Customers.Add(user);
+            dc.Customers.Add(customer);
+            return customer; 
         }
 
         public async Task<bool> CustAlreadyExists(string userName)

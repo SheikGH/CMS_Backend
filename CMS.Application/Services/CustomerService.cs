@@ -21,51 +21,40 @@ namespace CMS.Application.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        
-        public async Task<IEnumerable<CustomerDto>> GetAllCustomers()
+        public async Task<IEnumerable<CustomerDto>> GetCustomersAsync()
         {
-            var customers = await _unitOfWork.Customers.GetAllCustomersAsync();
-            //var customersDto = customers.Select(s => new CustomerDto
-            //{
-            //    CustomerId = s.CustomerId,
-            //    FirstName = s.FirstName,
-            //    LastName = s.LastName,
-            //    Email = s.Email,
-            //    Phone = s.Phone,
-            //    Address = s.Address,
-            //})
-            //.ToList();
+            var customers = await _unitOfWork.Customers.GetCustomersAsync();
             var customersDto = _mapper.Map<IEnumerable<CustomerDto>>(customers);
             return customersDto;
         }
 
-        // Other service methods
-        public async Task<CustomerDto> GetCustomerById(int id)
+        public async Task<CustomerDto> GetCustomerByIdAsync(int id)
         {
             var customer = await _unitOfWork.Customers.GetCustomerByIdAsync(id);
             var customerDto = _mapper.Map<CustomerDto>(customer);
             return customerDto;
         }
-        public void AddCustomer(CustomerDto customerDto)
+        public async Task<CustomerDto> AddCustomerAsync(CustomerDto customerDto)
         {
             var customer = _mapper.Map<Customer>(customerDto);
-            _unitOfWork.Customers.AddCustomerAsync(customer);
-            _unitOfWork.CompleteAsync();
+            await _unitOfWork.Customers.AddCustomerAsync(customer);
+            await _unitOfWork.CompleteAsync();
+            return customerDto;
         }
 
-        public void UpdateCustomer(CustomerDto customerDto)
+        public async Task<CustomerDto> UpdateCustomerAsync(CustomerDto customerDto)
         {
             var customer = _mapper.Map<Customer>(customerDto);
-            _unitOfWork.Customers.UpdateCustomerAsync(customer);
-            _unitOfWork.CompleteAsync();
+            await _unitOfWork.Customers.UpdateCustomerAsync(customer);
+            await _unitOfWork.CompleteAsync();
+            return customerDto;
         }
 
-        public void DeleteCustomer(int id)
+        public async Task<CustomerDto> DeleteCustomerAsync(int id)
         {
-            _unitOfWork.Customers.DeleteCustomerAsync(id);
-            _unitOfWork.CompleteAsync();
+            var customer = await _unitOfWork.Customers.DeleteCustomerAsync(id);
+            await _unitOfWork.CompleteAsync();
+            return _mapper.Map<CustomerDto>(customer);
         }
-
-       
     }
 }
