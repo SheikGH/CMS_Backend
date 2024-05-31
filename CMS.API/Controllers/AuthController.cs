@@ -18,9 +18,9 @@ namespace CMS.API.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IConfiguration configuration;
-        public AuthController(IAuthService customerService, IConfiguration configuration)
+        public AuthController(IAuthService authService, IConfiguration configuration)
         {
-            _authService = customerService;
+            _authService = authService;
             this.configuration = configuration;
         }
         [AllowAnonymous]

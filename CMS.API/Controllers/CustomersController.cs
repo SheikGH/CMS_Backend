@@ -26,7 +26,7 @@ namespace CMS.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
+        public async Task<ActionResult<CustomerResDto>> GetCustomerById(int id)
         {
             //var customer = await _mediator.Send(new GetCustomerByIdQuery(id));
             var customer = await _customerService.GetCustomerByIdAsync(id);
