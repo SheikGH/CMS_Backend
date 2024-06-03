@@ -7,6 +7,8 @@ Database Creation:
 	Update-Database
 
 Application: CMS
+Add Database Connection String, Your JWT Secret 'Key' in appsettings.json(CMS\CMS.API\appsettings.json) file.
+
 Install - Following Packages from NuGet =>
 CMS.Core =>
 	MediatR - Version="12.2.0,
