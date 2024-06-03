@@ -1,8 +1,12 @@
-Create Table as table name CMS
-Run following comments in Package ManagerConsole
-Add-Migration initialDb
-Update-Database
+API Url : https://localhost:7067/swagger/index.html
 
+Database Creation:
+1. Create Table as table name CMS
+2. Run following comments in Package ManagerConsole
+	Add-Migration initialDb
+	Update-Database
+
+Application: CMS
 Install - Following Packages from NuGet =>
 CMS.Core =>
 	MediatR - Version="12.2.0,
