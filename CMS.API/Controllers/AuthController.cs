@@ -38,6 +38,8 @@ namespace CMS.API.Controllers
             //loginRes.Token = "Token to be generated";
             return Ok(loginRes);
         }
+        
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterReqDto registerReqDto)
         {

@@ -77,7 +77,7 @@ builder.Services.AddAuthentication(options =>
     });
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -93,36 +93,11 @@ var app = builder.Build();
 
 //Comment default exception handling and create an customer exception handler by using MiddleWare
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
-//else
-//{
-//    app.UseExceptionHandler(
-//        options =>
-//        {
-//            options.Run(
-//                async context =>
-//                {
-//                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-//                    var ex = context.Features.Get<IExceptionHandlerFeature>();
-//                    if (ex != null)
-//                    {
-//                        await context.Response.WriteAsync(ex.Error.Message);
-//                    }
-//                }
-//             );
-//        }
-//    );
-//}
 
 //MiddleWare to handle exception - Builtin - exception handling
 //app.ConfigureBuiltinExceptionHandler();
 //MiddleWare to handle exception - Custom - exception handling
 app.ConfigureExceptionHandler();
-
 app.UseHsts();
 app.UseHttpsRedirection();
 app.UseRouting();
@@ -130,6 +105,7 @@ app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();

@@ -75,7 +75,7 @@ namespace CMS.API.Controllers
         {
             if (id != customer.CustomerId)
             {
-                return BadRequest();
+                return BadRequest($"id {id} is not match with customer.CustomerId {customer.CustomerId}");
             }
             var updatedCustomer = await _customerService.UpdateCustomerAsync(customer);
             if (updatedCustomer == null)
